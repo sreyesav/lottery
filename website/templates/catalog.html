@@ -1,0 +1,84 @@
+{% extends "base.html" %} {% block title %}Catalog{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Movie Browser</title>
+        <link rel="stylesheet" type="text/css" href="static/style.css">
+    </head>
+<body>
+	<header>
+		<h1>Browser</h1>
+
+    <div class="search-container">
+      <form action="/search">
+        <input type="text" placeholder="Search...">
+        <button type="submit">Search</button>
+      </form>
+    </div>
+    
+	</header>
+
+	<main>
+		<div class="movies-container">
+            <div class="section-header">
+              <h2>Now Playing</h2>
+            </div>
+            <section class="movie-now">
+              <img src="https://via.placeholder.com/260x260" alt="Movie Poster">
+              <div class="movie-info">
+                <h2>Movie Title 1</h2>
+                <a href="#"><button>Get Tickets</button></a>
+              </div>
+            </section>
+            
+            <section class="movie-now">
+              <img src="https://via.placeholder.com/260x260" alt="Movie Poster">
+              <div class="movie-info">
+                <h2>Movie Title 2</h2>
+                <a href="#"><button>Get Tickets</button></a>
+              </div>
+            </section>
+            
+            <section class="movie-now">
+              <img src="https://via.placeholder.com/260x260" alt="Movie Poster">
+              <div class="movie-info">
+                <h2>Movie Title 3</h2>
+                <a href="#"><button>Get Tickets</button></a>
+              </div>
+            </section>
+
+            <div class="section-header">
+              <h2>Upcoming</h2>
+            </div>
+            <section class="movie-upcoming">
+              <img src="https://via.placeholder.com/260x260" alt="Movie Poster">
+              <div class="movie-info">
+                <h2>Movie Title 1</h2>
+                <a href="#"><button>Get Tickets</button></a>
+              </div>
+            </section>
+            
+            <section class="movie-upcoming">
+              <img src="https://via.placeholder.com/260x260" alt="Movie Poster">
+              <div class="movie-info">
+                <h2>Movie Title 2</h2>
+                <a href="#"><button>Get Tickets</button></a>
+              </div>
+            </section>
+            
+            <section class="movie-upcoming">
+              <img src="https://via.placeholder.com/260x260" alt="Movie Poster">
+              <div class="movie-info">
+                <h2>Movie Title 3</h2>
+                <a href="#"><button>Get Tickets</button></a>
+              </div>
+            </section>
+        </div>  
+	</main>
+</body>
+</html>
+{% endblock %}

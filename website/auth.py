@@ -6,6 +6,10 @@ from flask_login import login_user, login_required, logout_user, current_user
 
 auth = Blueprint('auth', __name__)
 
+@auth.route('/catalog', methods=['GET', 'POST'] )
+def catalog():
+    return render_template("catalog.html", user=current_user)
+
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':

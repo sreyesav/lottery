@@ -1,7 +1,49 @@
 {% extends "base.html" %} {% block title %}Home Page{% endblock %}
 
 {% block content %}
-<h1 align="center">Movies</h1>
+<link rel="stylesheet" type="text/css" href="static/style.css">
+<h1 align="left">Raider Theaters</h1>
+<br/>
+
+    <div>
+        <h3 style="float: left; width: 50%;">CURRENTLY PLAYING</h3>
+        <button class="button" style="float: right; width: 8%; text-align: right;">Browse</button> <!-- This must be changed to a button-->
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <hr/>
+    <div class="movies-container">
+        <div class="section-header">
+          <h2>Now Playing</h2>
+        </div>
+        <section class="movie-now">
+          <img src="https://via.placeholder.com/260x260" alt="Movie Poster">
+          <div class="movie-info">
+            <h2>Movie Title 1</h2>
+            <a href="#"><button>Get Tickets</button></a>
+          </div>
+        </section>
+        
+        <section class="movie-now">
+          <img src="https://via.placeholder.com/260x260" alt="Movie Poster">
+          <div class="movie-info">
+            <h2>Movie Title 2</h2>
+            <a href="#"><button>Get Tickets</button></a>
+          </div>
+        </section>
+        
+        <section class="movie-now">
+          <img src="https://via.placeholder.com/260x260" alt="Movie Poster">
+          <div class="movie-info">
+            <h2>Movie Title 3</h2>
+            <a href="#"><button>Get Tickets</button></a>
+          </div>
+        </section>
+    </div>  
+
+    <br/>
+
 <ul class="list-group list-group-flush" id="notes">
     {% for note in user.notes %}
     <li class="list-group-item">
