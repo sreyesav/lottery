@@ -1,12 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
+{% extends "base.html" %} {% block title %}Home Page{% endblock %}
+
+{% block content %}
 <style>
+
     body {
       font-family: Arial;
-      color: white;
+      color: rgb(0, 0, 0);
+      position: fixed;
+      padding: 0px;
+      margin: 0px;
     }
     
     .split {
@@ -21,12 +23,12 @@
     
     .left {
       left: 0;
-      background-color: #333333;
+      background-color: #343A40;
     }
     
     .right {
       right: 0;
-      background-color: #333333;
+      background-color: #343A40;
     }
     
     .centered {
@@ -38,9 +40,11 @@
     }
     
     .review {
-        position: absolute;
-        bottom: 10px;
-        color: rgb(0, 136, 255);
+        position: fixed;
+        bottom: 10%;
+        top: 60%;
+        left: 5%;
+        color: black;
         z-index: 2;
     }
 
@@ -50,8 +54,7 @@
     
 <div class="split left">
   <div class="centered">
-    <h1>INSERT MOVIE NAME</h>
-    </br>
+    <h1>The Terminator 69</h>
     </br>
     <img src="https://via.placeholder.com/350x350" alt="Movie Poster">
   </div>
@@ -69,7 +72,25 @@
     <h2>Reviews</h2>
     <hr/>
     <p>The reviews for this movie go here.</p>
+
+    <ul class="list-group list-group-flush" id="notes">
+        {% for note in user.notes %}
+        <li class="list-group-item">
+            {{ note.data }}
+            <button type="button" class="close" onClick="deleteNote({{ note.id }})"> <!--This is the delete function for comments. We can try and use this only for admins-->
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </li>
+        {% endfor %}
+    </ul>
+    <form method="POST">
+        <textarea name="note" id="note" class="form-control" style="background-color: white; color: black;"></textarea>
+        <br/>
+        <div align="center">
+            <button type="submit" class="btn btn-primary">Add Review</button>
+        </div>
+    </form>
+
 </div>
 
-</body>
-</html> 
+{% endblock %}
