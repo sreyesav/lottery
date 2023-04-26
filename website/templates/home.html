@@ -7,7 +7,7 @@
 
     <div>
         <h3 style="float: left; width: 50%;">CURRENTLY PLAYING</h3>
-     <a href="/catalog"><button class="button" style="float: right; width: 8%; text-align: right;" onclick="">Browse</button></a> <!-- This must be changed to a button-->
+     <a href="/catalog"><button class="button" style="float: right; width: 10%; text-align: right;" onclick="">Browse</button></a> <!-- This must be changed to a button-->
     </div>
     <br/>
     <br/>
@@ -43,21 +43,4 @@
     </div>  
 
     <br/>
-
-<ul class="list-group list-group-flush" id="notes">
-    {% for note in user.notes %}
-    <li class="list-group-item">
-        {{ note.data }}
-        <button type="button" class="close" onClick="deleteNote({{ note.id }})"> <!--This is the delete function for comments. We can try and use this only for admins-->
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </li>
-    {% endfor %}
-</ul>
-<form method="POST">
-    <textarea name="note" id="note" class="form-control"></textarea>
-    <br/>
-    <div align="center">
-        <button type="submit" class="btn btn-primary">Add Comment</button>
-    </div>
 {% endblock %}
