@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, flash, jsonify
+from sqlalchemy import func
 from flask_login import login_required, current_user
-from .models import Note
+from .models import Note, TicketSales
 from . import db
 import json
 #import qrcode
@@ -8,16 +9,33 @@ import json
 #from flask_mail import Message
 
 views = Blueprint('views', __name__)
+
 @views.route('/admin', methods=['POST','GET'])
 def admin():
-    return render_template('admin.html', user=current_user)
+    latest_sale = TicketSales.query.order_by(TicketSales.id.desc()).first()
+    latest_sale = latest_sale.total_tickets
+
+    return render_template('admin.html',total_tickets=latest_sale, user=current_user)
 
 @views.route('/checkout', methods=['POST','GET'])
 def checkout():
     if request.method == 'POST':
-        tickets = int(request.form.get("tickets"))
-        flash('Purchase Complete, Check your email!', category='success')
+        num_tickets = int(request.form.get("num_tickets"))
 
+        #This grabs the latest number of tickets sold
+        latest_sale = TicketSales.query.order_by(TicketSales.id.desc()).first()
+        latest_sale = latest_sale.total_tickets
+
+        num_tickets+=latest_sale
+        ticket_sale = TicketSales(total_tickets=num_tickets)
+        db.session.add(ticket_sale)
+        db.session.commit()
+
+        #ticket_sale.total_tickets += int(num_tickets)
+
+        #db.session.commit()
+        
+        flash('Purchase Complete, Check your email!', category='success')
     return render_template('checkout.html', user=current_user)
 """
 ###########

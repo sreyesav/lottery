@@ -37,3 +37,13 @@ def create_database(app):
 
     if not path.exists('website/' + DB_NAME):
         db.create_all(app=app)
+
+
+""" To update database
+with app.app_context():
+    db.create_all()
+
+    db.session.add(User('admin', 'admin@example.com'))
+    db.session.add(User('guest', 'guest@example.com'))
+    db.session.commit()
+"""
