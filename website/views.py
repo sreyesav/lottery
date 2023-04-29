@@ -8,6 +8,9 @@ import json
 #from flask_mail import Message
 
 views = Blueprint('views', __name__)
+@views.route('/admin', methods=['POST','GET'])
+def admin():
+    return render_template('admin.html', user=current_user)
 
 @views.route('/checkout', methods=['POST','GET'])
 def checkout():

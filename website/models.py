@@ -1,7 +1,6 @@
 from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
-from werkzeug.security import generate_password_hash
 
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -38,8 +37,6 @@ class Booking(db.Model):
     #customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
     #screening_id = db.Column(db.Integer, db.ForeignKey('screening.id'))
     seat_count = db.Column(db.Integer, default=0) # 200 seats
-
-
 
 
 """

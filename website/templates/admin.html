@@ -1,0 +1,86 @@
+{% extends "base.html" %} {% block title %}Admin Page{% endblock %}
+
+{% block content %}
+  <head>
+    <title>Movie Booking Admin Page</title>
+  </head>
+  <body>
+    <h1>Movie Times</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Movie</th>
+          <th>Showtime</th>
+          <th>Tickets Sold</th>
+          <th>Image</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{movie_title_1}</td>
+          <td>{showtime_1}</td>
+          <td>{tickets_sold_1}</td>
+          <td><img src="{image_1}" alt="{movie_title_1}"></td>
+          <td>
+            <form action="/remove_movie" method="post">
+              <input type="hidden" name="movie_id" value="1">
+              <button type="submit">Remove</button>
+            </form>
+            <form action="/edit_movie" method="get">
+              <input type="hidden" name="movie_id" value="1">
+              <button type="submit">Edit</button>
+            </form>
+          </td>
+        </tr>
+        <tr>
+          <td>{movie_title_2}</td>
+          <td>{showtime_2}</td>
+          <td>{tickets_sold_2}</td>
+          <td><img src="{image_2}" alt="{movie_title_2}"></td>
+          <td>
+            <form action="/remove_movie" method="post">
+              <input type="hidden" name="movie_id" value="2">
+              <button type="submit">Remove</button>
+            </form>
+            <form action="/edit_movie" method="get">
+              <input type="hidden" name="movie_id" value="2">
+<button type="submit">Edit</button>
+            </form>
+          </td>
+        </tr>
+        <tr>
+          <td>{movie_title_3}</td>
+          <td>{showtime_3}</td>
+          <td>{tickets_sold_3}</td>
+          <td><img src="{image_3}" alt="{movie_title_3}"></td>
+          <td>
+            <form action="/remove_movie" method="post">
+              <input type="hidden" name="movie_id" value="3">
+              <button type="submit">Remove</button>
+            </form>
+            <form action="/edit_movie" method="get">
+              <input type="hidden" name="movie_id" value="3">
+              <button type="submit">Edit</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Add Movie</h2>
+    <form action="/add_movie" method="post">
+      <label for="title">Title:</label>
+      <input type="text" id="title" name="title"><br>
+
+      <label for="showtime">Showtime:</label>
+      <input type="text" id="showtime" name="showtime"><br>
+
+      <label for="tickets_sold">Tickets Sold:</label>
+      <input type="text" id="tickets_sold" name="tickets_sold"><br>
+
+      <label for="image_url">Image URL:</label>
+      <input type="text" id="image_url" name="image_url"><br>
+
+      <button type="submit">Add Movie</button>
+{% endblock %}
