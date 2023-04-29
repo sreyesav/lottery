@@ -1,6 +1,7 @@
 from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
+from werkzeug.security import generate_password_hash
 
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -8,26 +9,40 @@ class Note(db.Model):
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-#class Movies(db.Model):
-#database for movies, id, title, director, release date, runtime, genre, description, rating
-
-#classes to add: Theater, screening, change user to customer, booking, employees, reviews, customer activity
-
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
-    notes = db.relationship('Note') #can be changed to a movie review
+    notes = db.relationship('Note')
+    
+    def __init__(self, first_name: str, email: str, password: str):
+        self.first_name = first_name
+        self.email = email
+        self.password = password
+    
+    @staticmethod
+    def create(first_name, email, password):
+        new_user = User(first_name, email, password)
+        db.session.add(new_user)
+        db.session.commit()
+     #can be changed to a movie review
     #Add address, phone number, and last name
     #change to customer
 class Booking(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    theater = db.Column(db.String(150))
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
-    screening_id = db.Column(db.Integer, db.ForeignKey('screening.id'))
+    #movie = db.relationship("Movie")
+    #customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
+    #screening_id = db.Column(db.Integer, db.ForeignKey('screening.id'))
+    seat_count = db.Column(db.Integer, default=0) # 200 seats
 
+
+
+
+"""
 class Customer(db.Model): #not sure if we need this. we could change this to admin
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -49,6 +64,7 @@ class Theater(db.Model):
     screenings = db.relationship('Screening')
 
 class Movie(db.Model):
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(150))
     director = db.Column(db.String(150))
@@ -58,3 +74,5 @@ class Movie(db.Model):
     description = db.Column(db.String(10000))
     rating = db.Column(db.Float)
     screenings = db.relationship('Screening')
+
+"""

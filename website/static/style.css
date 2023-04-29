@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    color:#ffffff;
+    color:black;
     background-color: #343A40;
 }
 
@@ -29,7 +29,7 @@ header {
 	padding: 6px 10px;
 	margin-top: 8px;
 	margin-right: 16px;
-	background: #da8300;
+	background: red;
 	font-size: 17px;
 	border: none;
 	cursor: pointer;
@@ -37,7 +37,7 @@ header {
 }
 
 .search-container button:hover {
-	background: #8d3901;
+	background: red;
 }
 
 main {
@@ -71,7 +71,7 @@ h2 {
 }
 
 button {
-    background-color: #ff6600;
+    background-color: red;
     border: none;
     color: #fff;
     cursor: pointer;
@@ -81,7 +81,7 @@ button {
 }
 
 button:hover {
-    background-color: #ff5e00;
+    background-color: red;
 }
 
 .movies-container {

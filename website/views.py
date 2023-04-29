@@ -3,8 +3,51 @@ from flask_login import login_required, current_user
 from .models import Note
 from . import db
 import json
+#import qrcode
+#from io import BytesIO
+#from flask_mail import Message
 
 views = Blueprint('views', __name__)
+
+@views.route('/checkout', methods=['POST','GET'])
+def checkout():
+    if request.method == 'POST':
+        tickets = int(request.form.get("tickets"))
+        flash('Purchase Complete, Check your email!', category='success')
+
+    return render_template('checkout.html', user=current_user)
+"""
+###########
+@views.route('/generate_qr_code', methods=['POST'])
+def generate_qr_code():
+    email = request.form['email']
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return 'User not found', 404
+    
+    # Generate QR code image
+    qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
+    qr.add_data(str(user.id))
+    qr.make(fit=True)
+    img = qr.make_image(fill_color="black", back_color="white")
+    
+    # Generate confirmation code
+    confirmation_code = generate_confirmation_code()
+    user.confirmation_code = confirmation_code
+    db.session.commit()
+    
+    # Send email with confirmation code
+    msg = Message('Confirmation Code', sender='your_email@gmail.com', recipients=[email])
+    msg.body = f'Your confirmation code is {confirmation_code}'
+    with BytesIO() as buffer:
+        img.save(buffer, 'png')
+        buffer.seek(0)
+        msg.attach('qrcode.png', 'image/png', buffer.getvalue())
+    mail.send(msg)
+    
+    return 'Email sent successfully'
+####### not finished
+"""
 
 @views.route('/movie', methods=['GET','POST'])
 @login_required
