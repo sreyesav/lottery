@@ -10,6 +10,10 @@ import json
 
 views = Blueprint('views', __name__)
 
+@views.route('/edit', methods=['POST','GET'])
+def edit():
+    return render_template('edit.html', user=current_user)
+
 @views.route('/admin', methods=['POST','GET'])
 def admin():
     latest_sale = TicketSales.query.order_by(TicketSales.id.desc()).first()
@@ -31,10 +35,7 @@ def checkout():
         db.session.add(ticket_sale)
         db.session.commit()
 
-        #ticket_sale.total_tickets += int(num_tickets)
-
-        #db.session.commit()
-        
+        ####################STILL REQUIRES QR CODE##################### 
         flash('Purchase Complete, Check your email!', category='success')
     return render_template('checkout.html', user=current_user)
 """

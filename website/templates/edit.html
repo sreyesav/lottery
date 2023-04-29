@@ -1,0 +1,17 @@
+{% extends "base.html" %} {% block title %}Edit Page{% endblock %}
+
+{% block content %}
+<form method="POST">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title"><br>
+  
+    <label for="details">Details:</label>
+    <textarea id="details" name="details"></textarea><br>
+  
+    <label for="img">Image:</label>
+    <input type="file" id="img" name="img"><br>
+  
+    <input type="submit" value="Update">
+  </form>
+
+{% endblock %}

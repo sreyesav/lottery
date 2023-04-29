@@ -41,12 +41,7 @@ class Movie(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(150))
-    director = db.Column(db.String(150))
-    release_date = db.Column(db.DateTime(timezone=True))
-    runtime = db.Column(db.Integer)
-    genre = db.Column(db.String(50))
     description = db.Column(db.String(10000))
-    rating = db.Column(db.Float)
 
 class TicketSales(db.Model):
     id = db.Column(db.Integer, primary_key=True)

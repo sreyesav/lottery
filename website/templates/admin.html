@@ -19,11 +19,11 @@
         <tr>
           <td>{movie_title_1}</td>
           <td>{showtime_1}</td>
-          <td><img src="{image_1}" alt="{movie_title_1}"></td>
+          <td><img src="{ image_1 }" alt="{movie_title_1}"></td>
           <td>
-            <form action="/remove_movie" method="POST">
+            <form method="POST">
               <input type="hidden" name="movie_id" value="1">
-              <button type="submit">Remove</button>
+              <a href="/edit"><button>Remove</button></a>
             </form>
             <form action="/edit_movie" method="GET">
               <input type="hidden" name="movie_id" value="1">
@@ -34,7 +34,7 @@
         <tr>
           <td>{movie_title_2}</td>
           <td>{showtime_2}</td>
-          <td><img src="{image_2}" alt="{movie_title_2}"></td>
+          <td><img src="{ image_2 }" alt="{movie_title_2}"></td>
           <td>
             <form action="/remove_movie" method="POST">
               <input type="hidden" name="movie_id" value="2">
@@ -42,7 +42,7 @@
             </form>
             <form action="/edit_movie" method="GET">
               <input type="hidden" name="movie_id" value="2">
-<button type="submit">Edit</button>
+              <a href="/movie"><button>Edit</button></a>
             </form>
           </td>
         </tr>
