@@ -97,6 +97,13 @@ def movie():
 
 @views.route('/catalog', methods=['GET', 'POST'] )
 def catalog():
+    movies = []
+    movie_now_playing = True
+    movie_upcoming = False
+    # Loop through the movies and add them to the list
+    for movie in Movie.query.all():
+        movies.append(movie)
+        
     return render_template("catalog.html", user=current_user)
 
 @views.route('/', methods=['GET', 'POST'])
