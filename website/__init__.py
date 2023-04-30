@@ -21,7 +21,10 @@ def create_app():
 
     from .models import User#import the rest of the classes here
     
-    create_database(app)
+    #create_database(app)
+    with app.app_context():
+        db.create_all()
+        db.session.commit()
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
@@ -40,10 +43,5 @@ def create_database(app):
 
 
 """ To update database
-with app.app_context():
-    db.create_all()
 
-    db.session.add(User('admin', 'admin@example.com'))
-    db.session.add(User('guest', 'guest@example.com'))
-    db.session.commit()
 """

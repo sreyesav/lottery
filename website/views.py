@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, request, flash, jsonify
-from sqlalchemy import func
 from flask_login import login_required, current_user
-from .models import Note, TicketSales
+from .models import Note, TicketSales, Movie
 from . import db
 import json
 #import qrcode
@@ -9,6 +8,16 @@ import json
 #from flask_mail import Message
 
 views = Blueprint('views', __name__)
+
+@views.route('/dbadder',methods=['POST','GET'])
+def adder():
+    if request.method == 'POST':
+        title = request.form.get('title')
+        description = request.form.get('description')
+        new_movie = Movie(title=title, description=description)
+        db.session.add(new_movie)
+        db.session.commit()
+    return render_template('dbadder.html', user=current_user)
 
 @views.route('/edit', methods=['POST','GET'])
 def edit():
