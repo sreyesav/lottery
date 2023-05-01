@@ -4,6 +4,7 @@ from os import path
 from flask_login import LoginManager
 
 
+
 db = SQLAlchemy()
 DB_NAME = "database.db"
 
@@ -19,10 +20,11 @@ def create_app():
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
 
-    from .models import User#import the rest of the classes here
+    from .models import User  #import the rest of the classes here
     
-    #create_database(app)
+
     with app.app_context():
+        #db.drop_all()
         db.create_all()
         db.session.commit()
 
@@ -37,10 +39,8 @@ def create_app():
     return app
 
 def create_database(app):
-
     if not path.exists('website/' + DB_NAME):
         db.create_all(app=app)
-
 
 """ To update database
 

@@ -6,7 +6,8 @@
 <br/>
 
     <div>
-     <a href="/catalog"><button class="button" style="float: right; width: 10%; text-align: right;" onclick="">Browse</button></a> <!-- This must be changed to a button-->
+     <a href="/catalog"><button class="button" style="float: right; width: 10%; text-align: right;" onclick="">Browse</button></a>
+     <a href="/dbadder"><button>ADDER</button></a>
     </div>
     <br/>
     <br/>
@@ -20,7 +21,11 @@
           <img src="https://via.placeholder.com/260x260" alt="Movie Poster">
           <div class="movie-info">
             <h2>Movie Title 1</h2>
-            <a href="/movie"><button>Get Tickets</button></a>
+            <form method="POST" action="/movie">
+
+              <input type="hidden" name="movie_id">
+              <button type="submit">Get Tickets</button>
+            </form>
           </div>
         </section>
         
@@ -28,7 +33,10 @@
           <img src="https://via.placeholder.com/260x260" alt="Movie Poster">
           <div class="movie-info">
             <h2>Movie Title 2</h2>
-            <a href="/dbadder"><button>Get Tickets</button></a>
+            <form method="POST" action="/movie">
+              <input type="hidden" name="movie_id">
+              <button type="submit">Get Tickets</button>
+            </form>
           </div>
         </section>
         
@@ -36,7 +44,10 @@
           <img src="https://via.placeholder.com/260x260" alt="Movie Poster">
           <div class="movie-info">
             <h2>Movie Title 3</h2>
-            <a href="#"><button>Get Tickets</button></a>
+            <form method="POST" action="/movie">
+              <input type="hidden" name="movie_id">
+              <button type="submit">Get Tickets</button>
+            </form>
           </div>
         </section>
     </div>  

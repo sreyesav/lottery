@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, flash, jsonify
+from sqlalchemy import or_
 from flask_login import login_required, current_user
 from .models import Note, TicketSales, Movie
 from . import db
@@ -10,7 +11,7 @@ import json
 views = Blueprint('views', __name__)
 
 @views.route('/dbadder',methods=['POST','GET'])
-def adder():
+def dbadder():
     if request.method == 'POST':
         title = request.form.get('title')
         description = request.form.get('description')
@@ -83,33 +84,25 @@ def generate_qr_code():
 @views.route('/movie', methods=['GET','POST'])
 @login_required
 def movie():
-    if request.method == 'POST':
-        note = request.form.get('note')
+    # Query database for movie details based on movie_id
+    movie = Movie.query.first()
 
-        if len(note) < 1:
-            flash('Comment is too short', category='error')
-        else:
-            new_note = Note(data=note, user_id=current_user.id)
-            db.session.add(new_note)
-            db.session.commit()
-            flash('Comment Added!', category='success')
-    return render_template("movie.html", user=current_user)
+    return render_template("movie.html", movie=movie, user=current_user)
+
+
 
 @views.route('/catalog', methods=['GET', 'POST'] )
 def catalog():
-    movies = []
-    movie_now_playing = True
-    movie_upcoming = False
-    # Loop through the movies and add them to the list
-    for movie in Movie.query.all():
-        movies.append(movie)
-        
-    return render_template("catalog.html", user=current_user)
+    query = request.args.get('query')
+    movie = Movie.query.filter(or_(Movie.title.ilike(f'%{query}%'), Movie.director.ilike(f'%{query}%'))).all()
+    return render_template("catalog.html", user=current_user, movie=movie, query=query)
 
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-    return render_template("home.html", user=current_user)
+    movie = Movie.query.all()
+    return render_template('home.html', movie=movie, user=current_user)
+    #return render_template("home.html", user=current_user)
 
 @views.route('/delete-note', methods=['POST'])
 def delete_note():

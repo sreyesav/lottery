@@ -14,18 +14,10 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
+    last_name = db.Column(db.String(150))
+    address = db.Column(db.String(150))
+    number = db.Column(db.String(150), unique=True)
     notes = db.relationship('Note')
-    
-    def __init__(self, first_name: str, email: str, password: str):
-        self.first_name = first_name
-        self.email = email
-        self.password = password
-    
-    @staticmethod
-    def create(first_name, email, password):
-        new_user = User(first_name, email, password)
-        db.session.add(new_user)
-        db.session.commit()
     #Add address, phone number, and last name
 
 class Booking(db.Model):
