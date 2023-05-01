@@ -15,7 +15,8 @@ def dbadder():
     if request.method == 'POST':
         title = request.form.get('title')
         description = request.form.get('description')
-        new_movie = Movie(title=title, description=description)
+        url = request.form.get('url')
+        new_movie = Movie(img=url, title=title, description=description)
         db.session.add(new_movie)
         db.session.commit()
     return render_template('dbadder.html', user=current_user)
@@ -34,8 +35,8 @@ def admin():
 @views.route('/checkout', methods=['POST','GET'])
 def checkout():
     if request.method == 'POST':
+        
         num_tickets = int(request.form.get("num_tickets"))
-
         #This grabs the latest number of tickets sold
         latest_sale = TicketSales.query.order_by(TicketSales.id.desc()).first()
         latest_sale = latest_sale.total_tickets
@@ -84,8 +85,19 @@ def generate_qr_code():
 @views.route('/movie', methods=['GET','POST'])
 @login_required
 def movie():
+    if request.method == 'POST':
+        note = request.form.get('note')
+
+        if len(note) < 1:
+            flash('Comment is too short', category='error')
+        else:
+            new_note = Note(data=note, user_id=current_user.id)
+            db.session.add(new_note)
+            db.session.commit()
+            flash('Comment Added!', category='success')
     # Query database for movie details based on movie_id
-    movie = Movie.query.first()
+    movie_id = request.args.get('movie_id')
+    movie = Movie.query.get(movie_id)
 
     return render_template("movie.html", movie=movie, user=current_user)
 
@@ -93,14 +105,13 @@ def movie():
 
 @views.route('/catalog', methods=['GET', 'POST'] )
 def catalog():
-    query = request.args.get('query')
-    movie = Movie.query.filter(or_(Movie.title.ilike(f'%{query}%'), Movie.director.ilike(f'%{query}%'))).all()
-    return render_template("catalog.html", user=current_user, movie=movie, query=query)
+
+    return render_template("catalog.html", user=current_user)
 
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-    movie = Movie.query.all()
+    #movie = Movie.query.all()
     return render_template('home.html', movie=movie, user=current_user)
     #return render_template("home.html", user=current_user)
 

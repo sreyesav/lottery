@@ -53,7 +53,7 @@
     <div class="split left">
       <div class="centered">
         <h1>{{ movie.title }}</h1>
-        <img src="https://via.placeholder.com/350x350" alt="{{ movie.title }} Poster">
+        <img src="{{ movie.img }}" height="380" width="290" alt="{{ movie.title }} Poster">
       </div>
     </div>
 
@@ -61,7 +61,7 @@
       <div class="centered">
         <h2>Synopsis</h2>
         <p>{{ movie.description }}</p>
-        <form method="POST" action="/checkout">
+        <form action="/checkout">
             <input type="hidden" name="movie_id" value="{{ movie.id }}">
             <button type="submit">Get Tickets</button>
         </form>
@@ -71,8 +71,6 @@
     <div class="review">
       <h2>Reviews</h2>
       <hr/>
-      <p>The reviews for this movie go here.</p>
-  
       <ul class="list-group list-group-flush" id="notes">
           {% for note in user.notes %}
           <li class="list-group-item">

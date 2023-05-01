@@ -7,7 +7,11 @@
 
     <div>
      <a href="/catalog"><button class="button" style="float: right; width: 10%; text-align: right;" onclick="">Browse</button></a>
+     {% if user.email == "rogerdrodulfo@hotmail.com" %} <!-- Change to admin email-->
      <a href="/dbadder"><button>ADDER</button></a>
+     <a href="/admin"><button>Admin</button></a>
+    {% else %}
+    {% endif %}
     </div>
     <br/>
     <br/>
@@ -17,40 +21,41 @@
         <div class="section-header">
           <h2>Now Playing</h2>
         </div>
+        
         <section class="movie-now">
-          <img src="https://via.placeholder.com/260x260" alt="Movie Poster">
+          <img src="https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg" width="260px" height="320px" alt="Movie Poster">
           <div class="movie-info">
-            <h2>Movie Title 1</h2>
-            <form method="POST" action="/movie">
-
-              <input type="hidden" name="movie_id">
-              <button type="submit">Get Tickets</button>
+            <h2>Inception</h2>
+            <form method="GET" action="{{ url_for('views.movie', movie_id=1) }}">
+              <input type="hidden" name="movie_id" id="1" value="1">
+              <button type="submit">Details</button>
             </form>
           </div>
         </section>
         
         <section class="movie-now">
-          <img src="https://via.placeholder.com/260x260" alt="Movie Poster">
+          <img src="https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg" width="260px" height="320px" alt="Movie Poster">
           <div class="movie-info">
-            <h2>Movie Title 2</h2>
-            <form method="POST" action="/movie">
-              <input type="hidden" name="movie_id">
-              <button type="submit">Get Tickets</button>
+            <h2>Interstellar</h2>
+            <form method="GET" action="{{ url_for('views.movie', movie_id=2) }}">
+              <input type="hidden" name="movie_id" id="2" value="2">
+              <button type="submit">Details</button>
             </form>
           </div>
         </section>
         
         <section class="movie-now">
-          <img src="https://via.placeholder.com/260x260" alt="Movie Poster">
+          <img src="https://m.media-amazon.com/images/M/MV5BMTc2MTQ3MDA1Nl5BMl5BanBnXkFtZTgwODA3OTI4NjE@._V1_.jpg" width="260px" height="320px" alt="Movie Poster">
           <div class="movie-info">
-            <h2>Movie Title 3</h2>
-            <form method="POST" action="/movie">
-              <input type="hidden" name="movie_id">
-              <button type="submit">Get Tickets</button>
+            <h2>The Martian</h2>
+            <form method="GET" action="{{ url_for('views.movie', movie_id=3) }}">
+              <input type="hidden" name="movie_id" id="3" value="3">
+              <button type="submit">Details</button>
             </form>
           </div>
         </section>
     </div>  
 
     <br/>
+
 {% endblock %}

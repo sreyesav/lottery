@@ -30,10 +30,10 @@ class Booking(db.Model):
     #ticket_count = db.Column(db.Integer, nullable=False, default=0) # 200 seats
 
 class Movie(db.Model):
-
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(150))
     description = db.Column(db.String(10000))
+    img = db.Column(db.String(1000))
 
 class TicketSales(db.Model):
     id = db.Column(db.Integer, primary_key=True)

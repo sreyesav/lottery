@@ -20,13 +20,15 @@ def create_app():
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
 
-    from .models import User  #import the rest of the classes here
+    from .models import User, TicketSales  #import the rest of the classes here
     
 
-    with app.app_context():
-        #db.drop_all()
-        db.create_all()
-        db.session.commit()
+    #with app.app_context():
+    #    db.drop_all()
+    #    db.create_all()
+        # = TicketSales(total_tickets=0)
+        #db.session.add(ticket)
+     #   db.session.commit()
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
