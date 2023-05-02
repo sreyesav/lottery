@@ -50,11 +50,13 @@ def admin():
             flash('Movie updated successfully!', category='success')
 
         elif action == 'delete':
+            id = request.form.get('id')
             movie = Movie.query.filter_by(id=id).first()
-            if movie:
-                db.session.delete(movie)
-                db.session.commit()
-                flash('Movie deleted successfully!', category='success')
+            
+            db.session.delete(movie)
+            db.session.commit()
+            
+            flash('Movie deleted successfully!', category='success')
 
     return render_template('admin.html', total_tickets=latest_sale, movies=movies, user=current_user)
 
@@ -132,8 +134,14 @@ def movie():
 
 @views.route('/catalog', methods=['GET', 'POST'] )
 def catalog():
+    query = request.args.get('query', default='')
 
-    return render_template("catalog.html", user=current_user)
+    if query:
+        movies=Movie.query.filter(Movie.title.ilike(f'%{query}%')).all()
+    else:
+        movies = Movie.query.all()
+
+    return render_template("catalog.html", user=current_user, movies=movies, query=query)
 
 @views.route('/', methods=['GET', 'POST'])
 @login_required

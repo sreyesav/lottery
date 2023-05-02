@@ -44,7 +44,7 @@
               <td><input type="text" id="image_url" name="image_url" required value="{{ movie.img }}"></td>
               <td>
                 <input type="submit" value="Save Changes">
-                <button type="submit" name="action" value="delete" onclick="return confirm('Are you sure you want to delete this movie?')">Delete</button>
+                <input type="submit" name="action" value="delete" onclick="return confirm('Are you sure you want to delete this movie?')">
                 <input type="hidden" name="id" value="{{ movie.id }}">
               </td>
             </form>
@@ -52,5 +52,14 @@
         {% endfor %}
       </tbody>
     </table>
+    <form method="GET">
+    </br>
+    </br>
+      <h1>Tickets</h1>
+      <h2>Total Tickets Sold: {{ total_tickets }} </h2>
+    </form>
   </div>
+
+
+
 {% endblock %}
