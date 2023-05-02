@@ -1,89 +1,56 @@
 {% extends "base.html" %} {% block title %}Admin Page{% endblock %}
 
 {% block content %}
-  <head>
-    <title>Movie Booking Admin Page</title>
-  </head>
-  <body>
-    <h1>Movie Times</h1>
+    <h1>Admin Page</h1>
+
+    <h2>Add a new movie:</h2>
+    <form method="POST" action="{{ url_for('views.admin') }}">
+      <input type="hidden" name="action" value="add">
+        <div>
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
+        </div>
+        <div>
+            <label for="image_url">Image URL:</label>
+            <input type="text" id="image_url" name="image_url" required>
+        </div>
+        <div>
+            <input type="submit" value="Add Movie">
+        </div>
+    </form>
+
+    <h2>Edit existing movies:</h2>
     <table>
       <thead>
         <tr>
-          <th>Movie</th>
-          <th>Showtime</th>
-          <th>Image</th>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Image URL</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>{movie_title_1}</td>
-          <td>{showtime_1}</td>
-          <td><img src="{ image_1 }" alt="{movie_title_1}"></td>
-          <td>
-            <form method="POST">
-              <input type="hidden" name="movie_id" value="1">
-              <a href="/edit"><button>Remove</button></a>
+        {% for movie in movies %}
+          <tr>
+            <form method="POST" action="{{ url_for('views.admin') }}">
+              <input type="hidden" name="action" value="edit">
+              <input type="hidden" name="id" value="{{ movie.id }}">
+              <td><input type="text" id="title" name="title" required value="{{ movie.title }}"></td>
+              <td><textarea id="description" name="description" required>{{ movie.description }}</textarea></td>
+              <td><input type="text" id="image_url" name="image_url" required value="{{ movie.img }}"></td>
+              <td>
+                <input type="submit" value="Save Changes">
+                <button type="submit" name="action" value="delete" onclick="return confirm('Are you sure you want to delete this movie?')">Delete</button>
+                <input type="hidden" name="id" value="{{ movie.id }}">
+              </td>
             </form>
-            <form action="/edit_movie" method="GET">
-              <input type="hidden" name="movie_id" value="1">
-              <button type="submit">Edit</button>
-            </form>
-          </td>
-        </tr>
-        <tr>
-          <td>{movie_title_2}</td>
-          <td>{showtime_2}</td>
-          <td><img src="{ image_2 }" alt="{movie_title_2}"></td>
-          <td>
-            <form action="/remove_movie" method="POST">
-              <input type="hidden" name="movie_id" value="2">
-              <button type="submit">Remove</button>
-            </form>
-            <form action="/edit_movie" method="GET">
-              <input type="hidden" name="movie_id" value="2">
-              <a href="/movie"><button>Edit</button></a>
-            </form>
-          </td>
-        </tr>
-        <tr>
-          <td>{movie_title_3}</td>
-          <td>{showtime_3}</td>
-          <td><img src="{image_3}" alt="{movie_title_3}"></td>
-          <td>
-            <form action="/remove_movie" method="POST">
-              <input type="hidden" name="movie_id" value="3">
-              <button type="submit">Remove</button>
-            </form>
-            <form action="/edit_movie" method="GET">
-              <input type="hidden" name="movie_id" value="3">
-              <button type="submit">Edit</button>
-            </form>
-          </td>
-        </tr>
+          </tr>
+        {% endfor %}
       </tbody>
     </table>
-
-    <h2>Add Movie</h2> <!-- Change showtime to dropdown -->
-    <form action="/add_movie" method="POST">
-      <label for="title">Title:</label>
-      <input type="text" id="title" name="title"><br>
-
-      <label for="showtime">Showtime:</label>
-      <input type="text" id="showtime" name="showtime"><br>
-
-      <label for="image_url">Image URL:</label>
-      <input type="text" id="image_url" name="image_url"><br>
-      
-      <label for="image_url">Description:</label>
-      <input type="text" id="description" name="description"><br>
-
-      <button type="submit">Add Movie</button>
-
-    <form method="GET">
-    </br>
-    </br>
-      <h1>Tickets</h1>
-      <h2>Total Tickets Sold: {{ total_tickets }} </h2>
-    </form>
+  </div>
 {% endblock %}

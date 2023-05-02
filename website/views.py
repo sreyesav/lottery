@@ -10,16 +10,6 @@ import json
 
 views = Blueprint('views', __name__)
 
-@views.route('/dbadder',methods=['POST','GET'])
-def dbadder():
-    if request.method == 'POST':
-        title = request.form.get('title')
-        description = request.form.get('description')
-        url = request.form.get('url')
-        new_movie = Movie(img=url, title=title, description=description)
-        db.session.add(new_movie)
-        db.session.commit()
-    return render_template('dbadder.html', user=current_user)
 
 @views.route('/edit', methods=['POST','GET'])
 def edit():
@@ -27,10 +17,47 @@ def edit():
 
 @views.route('/admin', methods=['POST','GET'])
 def admin():
+
     latest_sale = TicketSales.query.order_by(TicketSales.id.desc()).first()
     latest_sale = latest_sale.total_tickets
 
-    return render_template('admin.html',total_tickets=latest_sale, user=current_user)
+    movies = Movie.query.all()
+
+    if request.method == 'POST':
+        action = request.form.get('action')
+
+        if action == 'add':
+            title = request.form.get('title')
+            description = request.form.get('description')
+            new_movie = Movie(title=title, description=description)
+            db.session.add(new_movie)
+            db.session.commit()
+            flash('Movie added successfully!', category='success')
+
+        elif action == 'edit':
+            id = request.form.get('id')
+            movie = Movie.query.filter_by(id=id).first()
+
+            title = request.form.get('title')
+            description = request.form.get('description')
+            image_url = request.form.get('image_url')
+            
+            movie.title = title
+            movie.description = description
+            movie.img = image_url
+
+            db.session.commit()
+            flash('Movie updated successfully!', category='success')
+
+        elif action == 'delete':
+            movie = Movie.query.filter_by(id=id).first()
+            if movie:
+                db.session.delete(movie)
+                db.session.commit()
+                flash('Movie deleted successfully!', category='success')
+
+    return render_template('admin.html', total_tickets=latest_sale, movies=movies, user=current_user)
+
 
 @views.route('/checkout', methods=['POST','GET'])
 def checkout():
@@ -127,3 +154,11 @@ def delete_note():
             db.session.commit()
     
     return jsonify({})
+
+@views.route('/movies/delete/<int:movie_id>', methods=['POST'])
+def delete_movie(movie_id):
+    movie = Movie.query.get_or_404(movie_id)
+    db.session.delete(movie)
+    db.session.commit()
+    flash('Movie deleted successfully!', category='success')
+    return jsonify({'success': True})

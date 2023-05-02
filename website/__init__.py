@@ -23,12 +23,12 @@ def create_app():
     from .models import User, TicketSales  #import the rest of the classes here
     
 
-    #with app.app_context():
+   # with app.app_context():
     #    db.drop_all()
-    #    db.create_all()
-        # = TicketSales(total_tickets=0)
+        #db.create_all()
+        #ticket= TicketSales(total_tickets=0)
         #db.session.add(ticket)
-     #   db.session.commit()
+       # db.session.commit()
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
