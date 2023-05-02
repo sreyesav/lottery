@@ -4,16 +4,13 @@ from flask_login import login_required, current_user
 from .models import Note, TicketSales, Movie
 from . import db
 import json
-#import qrcode
-#from io import BytesIO
-#from flask_mail import Message
-
+from io import BytesIO
+from flask import make_response
+import barcode
+from barcode.writer import ImageWriter
+from io import BytesIO
+from barcode.writer import ImageWriter
 views = Blueprint('views', __name__)
-
-
-@views.route('/edit', methods=['POST','GET'])
-def edit():
-    return render_template('edit.html', user=current_user)
 
 @views.route('/admin', methods=['POST','GET'])
 def admin():
@@ -74,42 +71,20 @@ def checkout():
         ticket_sale = TicketSales(total_tickets=num_tickets)
         db.session.add(ticket_sale)
         db.session.commit()
-
-        ####################STILL REQUIRES QR CODE##################### 
+        # Step 3: Generate barcode and render it on a new page
         flash('Purchase Complete, Check your email!', category='success')
+
+        code128 = barcode.get('code128', (str(num_tickets) + " " + current_user.email) , writer=ImageWriter())
+        buffer = BytesIO()
+        code128.write(buffer)
+        image_bytes = buffer.getvalue()
+        response = make_response(image_bytes)
+        response.headers['Content-Type'] = 'image/png'
+        
+        return response
+        
     return render_template('checkout.html', user=current_user)
-"""
-###########
-@views.route('/generate_qr_code', methods=['POST'])
-def generate_qr_code():
-    email = request.form['email']
-    user = User.query.filter_by(email=email).first()
-    if not user:
-        return 'User not found', 404
-    
-    # Generate QR code image
-    qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
-    qr.add_data(str(user.id))
-    qr.make(fit=True)
-    img = qr.make_image(fill_color="black", back_color="white")
-    
-    # Generate confirmation code
-    confirmation_code = generate_confirmation_code()
-    user.confirmation_code = confirmation_code
-    db.session.commit()
-    
-    # Send email with confirmation code
-    msg = Message('Confirmation Code', sender='your_email@gmail.com', recipients=[email])
-    msg.body = f'Your confirmation code is {confirmation_code}'
-    with BytesIO() as buffer:
-        img.save(buffer, 'png')
-        buffer.seek(0)
-        msg.attach('qrcode.png', 'image/png', buffer.getvalue())
-    mail.send(msg)
-    
-    return 'Email sent successfully'
-####### not finished
-"""
+
 
 @views.route('/movie', methods=['GET','POST'])
 @login_required
@@ -136,13 +111,19 @@ def movie():
 def catalog():
     query = request.args.get('query', default='')
 
-    if query:
-        movies=Movie.query.filter(Movie.title.ilike(f'%{query}%')).all()
-    else:
-        movies = Movie.query.all()
+    try:
+        if query:
+            movies=Movie.query.filter(Movie.title.ilike(f'%{query}%')).all()
+        else:
+            movies = Movie.query.all()
 
-    return render_template("catalog.html", user=current_user, movies=movies, query=query)
+        return render_template("catalog.html", user=current_user, movies=movies, query=query)
 
+    except Exception as e:
+        # Print the error to the console for debugging
+        print(e)
+        return "An error occurred while loading the catalog."
+    
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
@@ -163,10 +144,11 @@ def delete_note():
     
     return jsonify({})
 
-@views.route('/movies/delete/<int:movie_id>', methods=['POST'])
-def delete_movie(movie_id):
-    movie = Movie.query.get_or_404(movie_id)
+@views.route('/admin/delete_movie/<int:id>', methods=['POST'])
+@login_required
+def delete_movie(id):
+    movie = Movie.query.get_or_404(id)
     db.session.delete(movie)
     db.session.commit()
     flash('Movie deleted successfully!', category='success')
-    return jsonify({'success': True})
+    return render_template('admin.html')
