@@ -63,6 +63,7 @@ def checkout():
     if request.method == 'POST':
         
         num_tickets = int(request.form.get("num_tickets"))
+        temp_tickets = num_tickets
         #This grabs the latest number of tickets sold
         latest_sale = TicketSales.query.order_by(TicketSales.id.desc()).first()
         latest_sale = latest_sale.total_tickets
@@ -72,9 +73,8 @@ def checkout():
         db.session.add(ticket_sale)
         db.session.commit()
         # Step 3: Generate barcode and render it on a new page
-        flash('Purchase Complete, Check your email!', category='success')
 
-        code128 = barcode.get('code128', (str(num_tickets) + " " + current_user.email) , writer=ImageWriter())
+        code128 = barcode.get('code128', (str(temp_tickets) + " " + current_user.email) , writer=ImageWriter())
         buffer = BytesIO()
         code128.write(buffer)
         image_bytes = buffer.getvalue()
