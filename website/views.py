@@ -22,6 +22,16 @@ def admin():
 
     if request.method == 'POST':
         action = request.form.get('action')
+        
+        if action == 'delete':
+            id = request.form.get('id')
+            movie = Movie.query.filter_by(id=id).first()
+            
+            movie.title = None
+            movie.description = None
+            movie.img = None
+            
+            db.session.commit()
 
         if action == 'add':
             title = request.form.get('title')
@@ -31,7 +41,7 @@ def admin():
             db.session.commit()
             flash('Movie added successfully!', category='success')
 
-        elif action == 'edit':
+        if action == 'edit':
             id = request.form.get('id')
             movie = Movie.query.filter_by(id=id).first()
 
@@ -45,15 +55,6 @@ def admin():
 
             db.session.commit()
             flash('Movie updated successfully!', category='success')
-
-        elif action == 'delete':
-            id = request.form.get('id')
-            movie = Movie.query.filter_by(id=id).first()
-            
-            db.session.delete(movie)
-            db.session.commit()
-            
-            flash('Movie deleted successfully!', category='success')
 
     return render_template('admin.html', total_tickets=latest_sale, movies=movies, user=current_user)
 
@@ -143,12 +144,3 @@ def delete_note():
             db.session.commit()
     
     return jsonify({})
-
-@views.route('/admin/delete_movie/<int:id>', methods=['POST'])
-@login_required
-def delete_movie(id):
-    movie = Movie.query.get_or_404(id)
-    db.session.delete(movie)
-    db.session.commit()
-    flash('Movie deleted successfully!', category='success')
-    return render_template('admin.html')
