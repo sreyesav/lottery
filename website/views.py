@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, jsonify
+from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from sqlalchemy import or_
 from flask_login import login_required, current_user
 from .models import Note, TicketSales, Movie
@@ -27,16 +27,19 @@ def admin():
             id = request.form.get('id')
             movie = Movie.query.filter_by(id=id).first()
             
+            '''
             movie.title = None
             movie.description = None
             movie.img = None
-            
+            '''
+            db.session.delete(movie)
             db.session.commit()
 
         if action == 'add':
             title = request.form.get('title')
             description = request.form.get('description')
-            new_movie = Movie(title=title, description=description)
+            img = request.form.get('image_url')
+            new_movie = Movie(title=title, description=description,img=img)
             db.session.add(new_movie)
             db.session.commit()
             flash('Movie added successfully!', category='success')
@@ -87,9 +90,21 @@ def checkout():
     return render_template('checkout.html', user=current_user)
 
 
-@views.route('/movie', methods=['GET','POST'])
+@views.route('/movie', methods=['GET', 'POST'])
 @login_required
 def movie():
+    
+    movie_id = request.args.get('movie_id')
+
+
+    title = request.args.get('title')
+    if title:
+        movie = Movie.query.filter_by(title=title).first()
+        if movie:
+            return redirect(url_for('views.movie', movie_id=movie.id))
+        else:
+            flash('Movie not found', category='error')
+
     if request.method == 'POST':
         note = request.form.get('note')
 
@@ -101,36 +116,24 @@ def movie():
             db.session.commit()
             flash('Comment Added!', category='success')
     # Query database for movie details based on movie_id
-    movie_id = request.args.get('movie_id')
+    
     movie = Movie.query.get(movie_id)
-
-    return render_template("movie.html", movie=movie, user=current_user)
-
+    return render_template("movie.html", movie=movie, user=current_user, movie_id=movie.id)
+    
 
 
 @views.route('/catalog', methods=['GET', 'POST'] )
+@login_required
 def catalog():
-    query = request.args.get('query', default='')
+    movies = Movie.query.all()
+    return render_template("catalog.html", movie=movies, user=current_user)
 
-    try:
-        if query:
-            movies=Movie.query.filter(Movie.title.ilike(f'%{query}%')).all()
-        else:
-            movies = Movie.query.all()
-
-        return render_template("catalog.html", user=current_user, movies=movies, query=query)
-
-    except Exception as e:
-        # Print the error to the console for debugging
-        print(e)
-        return "An error occurred while loading the catalog."
     
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-    #movie = Movie.query.all()
     return render_template('home.html', movie=movie, user=current_user)
-    #return render_template("home.html", user=current_user)
+
 
 @views.route('/delete-note', methods=['POST'])
 def delete_note():

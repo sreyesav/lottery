@@ -63,7 +63,11 @@
         <p>{{ movie.description }}</p>
         <form action="/checkout">
             <input type="hidden" name="movie_id" value="{{ movie.id }}">
+            {% if movie.id < 4 %}
             <button type="submit">Get Tickets</button>
+            {% else %}
+            <button type="submit">Preorder Tickets</button>
+            {% endif %}
         </form>
       </div>
     </div>
@@ -82,7 +86,7 @@
           {% endfor %}
       </ul>
       <form method="POST">
-          <textarea name="note" id="note" class="form-control" style="background-color: white; color: black;"></textarea>
+          <textarea name="note" id="note" class="form-control" style="background-color: #343A40; color: black;"></textarea>
           <br/>
           <div align="center">
               <button type="submit" class="btn btn-primary">Add Review</button>

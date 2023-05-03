@@ -4,15 +4,15 @@
 <link rel="stylesheet" type="text/css" href="static/style.css">
 <h1 align="left">Raider Theaters</h1>
 <br/>
-    <div>
-        <h3 style="float: left; width: 50%;">CURRENTLY PLAYING</h3>
-        <div class="search-container">
-          <form action="{{ url_for('views.movie') }}" method="GET">
-            <input type="text" name="query" placeholder="Search...">
-            <button type="submit">Search</button>
-        </form>
-        </div>
+  <div>
+    <h3 style="float: left; width: 50%;">CURRENTLY PLAYING</h3>
+    <div class="search-container">
+      <form method="GET" action="{{ url_for('views.movie', movie_id=1) }}">
+        <input type="text" name="title" id="{{ movie.id }}">
+        <button type="submit">Search</button>
+      </form>
     </div>
+  </div>
     <br/>
     <hr/>
     <div class="movies-container">
