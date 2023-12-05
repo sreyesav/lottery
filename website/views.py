@@ -10,6 +10,7 @@ from barcode.writer import ImageWriter
 
 views = Blueprint('views', __name__)
 
+#function to calculate the winning amount 
 def calculate_winning_amount(winning_numbers, ticket_numbers, price):
     num_matches = sum(1 for num in ticket_numbers if num in winning_numbers)
 
@@ -23,24 +24,26 @@ def calculate_winning_amount(winning_numbers, ticket_numbers, price):
         return price * 0.01  # 1% winning amount
     else:
         return 0  # No winning amount
-
+    
+#flask route for the admin template
 @views.route('/admin', methods=['POST', 'GET'])
 def admin():
+    #info about how many tickets have been sold
     latest_sale = TicketSales.query.order_by(TicketSales.id.desc()).first()
     total_tickets = latest_sale.total_tickets if latest_sale else 0
     lotteries = Lottery.query.all()
-
+    
     if request.method == 'POST':
         action = request.form.get('action')
-
+        #delets
         if action == 'delete':
             id = request.form.get('id')
             lottery = Lottery.query.filter_by(id=id).first()
             db.session.delete(lottery)
             db.session.commit()
             flash('Lottery deleted successfully!', category='success')
-            return redirect(url_for('views.home'))
-
+            return redirect(url_for('views.admin'))
+        #adds
         if action == 'add':
             name = request.form.get('name')
             description = request.form.get('description')
@@ -52,6 +55,7 @@ def admin():
             winning_number4 = request.form.get('winning_number4')
             winning_number5 = request.form.get('winning_number5')
             winning_amount = request.form.get('winning_amount')
+            drawing_date = request.form.get('drawing_date')
             
 
             new_lottery = Lottery(
@@ -64,13 +68,14 @@ def admin():
                 winning_number3=winning_number3,
                 winning_number4=winning_number4,
                 winning_number5=winning_number5,
-                winning_amount=winning_amount
+                winning_amount=winning_amount,
+                drawinf_date=drawing_date
             )
             db.session.add(new_lottery)
             db.session.commit()
             flash('Lottery added successfully!', category='success')
-            return redirect(url_for('views.home'))
-
+            return redirect(url_for('views.admin'))
+        #edits
         if action == 'edit':
             id = request.form.get('id')
             lottery = Lottery.query.filter_by(id=id).first()
@@ -85,6 +90,8 @@ def admin():
             winning_number4 = request.form.get('winning_number4')
             winning_number5 = request.form.get('winning_number5')
             winning_amount = request.form.get('winning_amount')
+            drawing_date = request.form.get('drawing_date')
+
 
             lottery.name = name
             lottery.description = description
@@ -96,14 +103,15 @@ def admin():
             lottery.winning_number4 = winning_number4
             lottery.winning_number5 = winning_number5
             lottery.winning_amount = winning_amount
+            lottery.drawing_date = drawing_date
 
             db.session.commit()
             flash('Lottery updated successfully!', category='success')
-            return redirect(url_for('views.home'))
+            return redirect(url_for('views.admin'))
 
     return render_template('admin.html', total_tickets=total_tickets, lotteries=lotteries, user=current_user)
 
-
+#flask route for the chekout template
 @views.route('/checkout', methods=['POST', 'GET'])
 def checkout():
     if request.method == 'POST':
@@ -113,14 +121,14 @@ def checkout():
         name_on_card = request.form.get("name-on-card")#Not using
         cvv = request.form.get("cvv")#Not using
         expiration_date = request.form.get("expiration-date")#Not using
-        price = float(request.form.get("price"))  # Assuming price is a float
+        price = float(request.form.get("price"))  
         lottery_id = int(request.form.get("lottery_id"))
         drawing_date = request.form.get("drawing_date")
 
         # increases sales 
         latest_sale = TicketSales.query.order_by(TicketSales.id.desc()).first()
-        latest_sale = latest_sale.total_tickets
-        num_tickets += latest_sale
+        if latest_sale is not None:
+            num_tickets += latest_sale.total_tickets
         ticket_sale = TicketSales(total_tickets=num_tickets)
         db.session.add(ticket_sale)
         db.session.commit()
@@ -187,7 +195,7 @@ def checkout():
     return render_template('checkout.html', lottery=lottery, num_tickets=num_tickets, payment_method=payment_method, user=current_user)
 
 
-
+#flask route for the lottery template
 @views.route('/lottery', methods=['GET', 'POST'])
 @login_required
 def lottery():
@@ -215,7 +223,7 @@ def catalog():
     lotteries = Lottery.query.all()  # Fetch all lotteries from the database
     return render_template("catalog.html", lotteries=lotteries, user=current_user)
 
-
+#flask route for order history
 @views.route('/order-history')
 @login_required 
 def order_history():
@@ -227,21 +235,61 @@ def order_history():
 
 
 
-
+#flask route for the home
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
     return render_template('home.html', user=current_user)
 
 
-@views.route('/delete-ticket', methods=['POST'])
-def delete_ticket():
-    ticket = json.loads(request.data)
-    ticket_id = ticket['ticket_id']
-    ticket = LotteryTicket.query.get(ticket_id)
+# New route for generating barcode
+@views.route('/generate-barcode/<int:ticket_id>')
+@login_required
+def generate_barcode(ticket_id):
+    ticket = LotteryTicket.query.get_or_404(ticket_id)
 
-    if ticket:
-        db.session.delete(ticket)
-        db.session.commit()
+    # Concatenate user email and chosen number for barcode content
+    barcode_content = f"{current_user.email} {ticket.winning_number1} {ticket.winning_number2} {ticket.winning_number3} {ticket.winning_number4 } {ticket.winning_number5}"
 
-    return jsonify({})
+    # Generate barcode image using Code128
+    code128 = barcode.get('code128', barcode_content, writer=ImageWriter())
+    buffer = BytesIO()
+    code128.write(buffer)
+    image_bytes = buffer.getvalue()
+
+    # Create a Flask response with the barcode image
+    response = make_response(image_bytes)
+    response.headers['Content-Type'] = 'image/png'
+
+    return response
+
+@views.route('/account', methods=['GET', 'POST'])
+@login_required
+def account():
+    if request.method == 'POST':
+        new_name = request.form.get('new_name')
+        new_address = request.form.get('new_address')
+        new_phone_number = request.form.get('new_phone_number')
+        new_email = request.form.get('new_email')
+
+        # Perform form validation
+        if len(new_name) < 2:
+            flash('Name must be at least 2 characters', 'error')
+        elif len(new_address) < 5:
+            flash('Address must be at least 5 characters', 'error')
+        elif len(new_phone_number) < 10:
+            flash('Phone number must be at least 10 characters', 'error')
+        else:
+            # Update user information
+            current_user.name = new_name
+            current_user.address = new_address
+            current_user.phone_number = new_phone_number
+            current_user.email = new_email
+
+            # Save changes to the database
+            db.session.commit()
+
+            flash('Account information updated successfully', 'success')
+            return redirect(url_for('views.account'))
+
+    return render_template('account.html', user=current_user)

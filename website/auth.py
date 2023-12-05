@@ -34,7 +34,9 @@ def logout():
 def sign_up():
     if request.method == 'POST':
         email = request.form.get('email')
-        name = request.form.get('name')  # Adjusted to match the new 'name' field in the User model
+        name = request.form.get('name')  
+        address = request.form.get('address')  
+        number = request.form.get('number')  
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
 
@@ -50,7 +52,7 @@ def sign_up():
         elif len(password1) < 8:
              flash('Password must be greater than 7 characters', category='error')
         else:
-            new_user = User(email=email, name=name, password=generate_password_hash(password1, method='pbkdf2:sha256'))
+            new_user = User(email=email, name=name, password=generate_password_hash(password1, method='pbkdf2:sha256'), address=address, phone_number=number )
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)

@@ -15,6 +15,7 @@
                         <th>Drawing Date</th>
                         <th>Price</th>
                         <th>Winning Amount</th>
+                        <th>View/Display Ticket</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,7 +25,10 @@
                             <td>{{ ticket.winning_number1 }}, {{ ticket.winning_number2 }}, {{ ticket.winning_number3 }}, {{ ticket.winning_number4 }}, {{ ticket.winning_number5 }}</td>
                             <td>{{ ticket.drawing_date }}</td>
                             <td>${{ ticket.price }}</td>
-                            <td>{% if ticket.winning_amount %}${{ ticket.winning_amount }}{% else %}Not announced{% endif %}</td>
+                            <td>{% if ticket.winning_amount %}${{ ticket.winning_amount }}{% else %}$0.0{% endif %}</td>
+                            <td><a href="{{ url_for('views.generate_barcode', ticket_id=ticket.id) }}" target="_blank">
+                                <button>Generate Barcode</button>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

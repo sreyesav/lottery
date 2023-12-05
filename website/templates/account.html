@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %} Account{% endblock %}
+
+{% block content %}
+    <h1> Account Information</h1>
+    <br>
+    <form method="POST">
+        <div class="form-group">
+            <label for="new_name">New Name</label>
+            <input type="text" class="form-control" id="new_name" name="new_name" value="{{ user.name }}" required>
+        </div>
+        <div class="form-group">
+            <label for="new_address">New Address</label>
+            <input type="text" class="form-control" id="new_address" name="new_address" value="{{ user.address }}" required>
+        </div>
+        <div class="form-group">
+            <label for="new_phone_number">New Phone Number</label>
+            <input type="text" class="form-control" id="new_phone_number" name="new_phone_number" value="{{ user.phone_number }}" required>
+        </div>
+        <div class="form-group">
+            <label for="new_email">New Email</label>
+            <input type="text" class="form-control" id="new_email" name="new_email" value="{{ user.email }}" required>
+        </div>
+        <div class="form-group">
+            <label for="current_name">Current Name</label>
+            <input type="text" class="form-control" id="current_name" name="current_name" value="{{ user.name }}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="current_address">Current Address</label>
+            <input type="text" class="form-control" id="current_address" name="current_address" value="{{ user.address }}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="current_phone_number">Current Phone Number</label>
+            <input type="text" class="form-control" id="current_phone_number" name="current_phone_number" value="{{ user.phone_number }}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="current_email">Current Email</label>
+            <input type="text" class="form-control" id="current_email" name="current_email" value="{{ user.email }}" readonly>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+{% endblock %}
