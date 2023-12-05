@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Order History{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="mt-4 mb-4">Order History</h1>
+
+        {% if user_tickets %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Ticket ID</th>
+                        <th>Winning Numbers</th>
+                        <th>Drawing Date</th>
+                        <th>Price</th>
+                        <th>Winning Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in user_tickets %}
+                        <tr>
+                            <td>{{ ticket.id }}</td>
+                            <td>{{ ticket.winning_number1 }}, {{ ticket.winning_number2 }}, {{ ticket.winning_number3 }}, {{ ticket.winning_number4 }}, {{ ticket.winning_number5 }}</td>
+                            <td>{{ ticket.drawing_date }}</td>
+                            <td>${{ ticket.price }}</td>
+                            <td>{% if ticket.winning_amount %}${{ ticket.winning_amount }}{% else %}Not announced{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="alert alert-info">No orders found.</p>
+        {% endif %}
+    </div>
+{% endblock %}

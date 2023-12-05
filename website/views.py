@@ -180,6 +180,7 @@ def checkout():
 
     lottery_id = request.args.get('lottery_id')
     num_tickets = request.args.get('num_tickets', 1, type=int)
+    payment_method = request.args.get('paiment method')
 
     lottery = Lottery.query.get(lottery_id)
 
@@ -213,6 +214,16 @@ def lottery():
 def catalog():
     lotteries = Lottery.query.all()  # Fetch all lotteries from the database
     return render_template("catalog.html", lotteries=lotteries, user=current_user)
+
+
+@views.route('/order-history')
+@login_required 
+def order_history():
+    # Query the database to get all LotteryTicket entries for the current user
+    user_tickets = LotteryTicket.query.filter_by(user_id=current_user.id).all()
+
+    # Render the order history template with the user_tickets data
+    return render_template('order.html', user_tickets=user_tickets,user=current_user)
 
 
 
