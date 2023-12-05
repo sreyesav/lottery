@@ -42,9 +42,3 @@ class Lottery(db.Model):
 class TicketSales(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     total_tickets = db.Column(db.Integer, nullable=False, default=0)
-
-class PurchaseHistory(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    ticket_id = db.Column(db.Integer, db.ForeignKey('lottery_ticket.id'))
-    date_purchased = db.Column(db.DateTime(timezone=True), default=func.now())
