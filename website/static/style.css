@@ -4,51 +4,8 @@ body {
     background-color: #ffffff;
 }
 
-header {
-	background-color: #004F98;
-	color: #ffffff;
-	padding: 10px;
-	text-align: left;
-	position: relative;
-}
-
-.search-container {
-	float: right;
-}
-
-.search-container input[type=text] {
-	padding: 6px;
-	margin-top: 8px;
-	font-size: 17px;
-	border: none;
-	background: #f1f1f1;
-}
-
-.search-container button {
-	float: right;
-	padding: 6px 10px;
-	margin-top: 8px;
-	margin-right: 16px;
-	background: red;
-	font-size: 17px;
-	border: none;
-	cursor: pointer;
-	color: #fff;
-}
-
-.search-container button:hover {
-	background: red;
-}
-
-main {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    padding: 20px;
-}
-
 section {
-    background-color: #f5f5f5;
+    background-color: #BCD4E6;
     border-radius: 5px;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
     margin: 10px;
@@ -56,22 +13,8 @@ section {
     flex-basis: 45%; /* or any value less than 50% */
 }
 
-.section-header {
-	width: 100%;
-	text-align: left;
-	margin-bottom: 0px;
-  }
-  
-.section-header h2 {
-	margin-top: 0;
-}
-
-h2 {
-    margin-top: 0;
-}
-
 button {
-    background-color: red;
+    background-color: #004F98;
     border: none;
     color: #fff;
     cursor: pointer;
@@ -80,50 +23,25 @@ button {
     padding: 10px 20px;
 }
 
-button:hover {
-    background-color: red;
-}
-
-.movies-container {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: flex-start;
-  }
-
-.movie {
-	flex-basis: 30%;
-	margin-right: 10px;
-	margin-bottom: 20px;
+.lottery {
+	
   }
   
-.movie img {
-    width: 100%;
+.lottery img {
+    width: 75%;
     height: auto;
     object-fit: cover;
+    display: block;
+    margin: 0 auto;
 }
   
-.movie-info {
+.lottery-info {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: start;
     width: 100%;
     padding: 20px;
     background-color: #fff;
 }
   
-.movie-now {
-    flex-basis: 25%;
-    margin-right: 10px;
-    margin-bottom: 20px;
-}
-
-.movie-upcoming {
-    flex-basis: 25%;
-    margin-right: 10px;
-    margin-bottom: 20px;
-}
-  
-.movie:last-child {
-    margin-right: 0;
-}

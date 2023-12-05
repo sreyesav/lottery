@@ -5,15 +5,15 @@
 {% block content %}
 <head>
     <meta charset="UTF-8">
-    <title>LPS Checkout</title>
+    <title>Lottery Purchase System Checkout</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='checkout.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>LPS checkout</h1>
+        <h1>Lottery Purchase System Checkout</h1>
         <form method="POST">
             <div class="form-group">
-                <label for="num_tickets">Number of Tickets:</label>
+                <label for="num_tickets">Number of Tickets(This will all have the same numbers):</label>
                 <input type="number" id="num_tickets" name="num_tickets" min="1" max="5" value="{{ num_tickets }}" required>
             </div>
             <div class="form-group">

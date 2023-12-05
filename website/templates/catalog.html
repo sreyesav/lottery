@@ -12,16 +12,14 @@
 </div>
 <br/>
 <hr/>
-<div class="lottery-tickets-container">
-    <div class="section-header">
-    </div>
-
+<div class="lottery">
     {% for lottery in lotteries %}
-    <section class="lottery-ticket">
+    <section class="lottery">
         <img src="{{ lottery.img }}" width="260px" height="320px" alt="{{ lottery.name }} Ticket Image">
         <div class="ticket-info">
             <h2>{{ lottery.name }}</h2>
             <p>Next Draw: {{ lottery.drawing_date }}</p>
+            <p>Jackpot: ${{ lottery.winning_amount}}</p>
             <form method="GET" action="{{ url_for('views.lottery', lottery_id=lottery.id) }}">
                 <input type="hidden" name="lottery_id" id="{{ lottery.id }}" value="{{ lottery.id }}">
                 <button type="submit">Details</button>
