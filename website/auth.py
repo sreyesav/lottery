@@ -6,7 +6,6 @@ from flask_login import login_user, login_required, logout_user, current_user
 
 auth = Blueprint('auth', __name__)
 
-
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -23,10 +22,10 @@ def login():
                 flash('Incorrect password', category='error')
         else:
             flash('Email does not exist', category='error')
-    return  render_template("login.html", user=current_user)
+    return render_template("login.html", user=current_user)
 
 @auth.route('/logout')
-@login_required # makes login required for this
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('auth.login'))
@@ -35,8 +34,7 @@ def logout():
 def sign_up():
     if request.method == 'POST':
         email = request.form.get('email')
-        first_name = request.form.get('firstName')
-        last_name = request.form.get('lastName')
+        name = request.form.get('name')  # Adjusted to match the new 'name' field in the User model
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
 
@@ -45,24 +43,18 @@ def sign_up():
             flash('Email already exists', category='error')
         elif len(email) < 3:
             flash('Email must be greater than 2 characters', category='error')
-            pass
-        elif len(first_name) < 2:
-            flash('First name must be greater than 1 character', category='error')
-            pass
+        elif len(name) < 2:  # Adjusted to match the new 'name' field
+            flash('Name must be greater than 1 character', category='error')
         elif password1 != password2:
             flash('Passwords don\'t match', category='error')
-            pass
         elif len(password1) < 8:
-             flash('password must be greater than 7 characters', category='error')
-             pass
+             flash('Password must be greater than 7 characters', category='error')
         else:
-            new_user = User(email=email, first_name=first_name, password=generate_password_hash(password1, method='sha256'))
+            new_user = User(email=email, name=name, password=generate_password_hash(password1, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
-            #something is wrong with the line below after signing up a user. Attribute error'NoneType' object has no attribute 'is_active' 
-            login_user(new_user, remember=True) # logs in user after sign up, need to implement something or change something for email verification
+            login_user(new_user, remember=True)
             flash('Account Created Successfully', category='success')
             return redirect(url_for('views.home'))
-
 
     return render_template("sign_up.html", user=current_user)
