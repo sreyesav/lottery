@@ -1,1 +1,1 @@
-Movie booking system for software engineering.
+LPS for software engineering.

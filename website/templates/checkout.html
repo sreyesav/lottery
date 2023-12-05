@@ -1,101 +1,83 @@
-{% extends "base.html" %} {% block title %}Checkout Page{% endblock %}
+{% extends "base.html" %}
+
+{% block title %}Lottery Ticket Checkout{% endblock %}
 
 {% block content %}
 <head>
-	<meta charset="UTF-8">
-	<title>Movie Booking Checkout</title>
-	<link rel="stylesheet" href="{{ url_for('static', filename='checkout.css') }}">
+    <meta charset="UTF-8">
+    <title>LPS Checkout</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='checkout.css') }}">
 </head>
 <body>
-	<div class="container">
-		<h1>Movie Booking Checkout</h1>
-		<form method="POST">
-			<div class="form-group">
-				<label for="tickets">Number of Tickets:</label>
-				<input type="number" id="num_tickets" name="num_tickets" min="1" max="10" value="1" required>
-			</div>
-			<div class="form-group">
-				<label for="payment">Payment Method:</label>
-				<select id="payment" name="payment" required>
-					<option value="">Select a payment method</option>
-					<option value="Credit Card">Credit Card</option>
-					<option value="Debit Card">Debit Card</option>
-				</select>
-			</div>
-			<div class="form-group">
-				<label for="card">Card Number:</label>
-				<input type="text" id="card" name="card" required>
-			</div>
-			<div class="form-group">
-				<label for="name-on-card">Name on Card:</label>
-				<input type="text" id="name-on-card" name="name-on-card" required>
-			</div>
-			<div class="form-group">
-				<label for="cvv">CVV:</label>
-				<input type="text" id="cvv" name="cvv" required>
-			</div>
-			<div class="form-group">
-				<label for="expiration-date">Expiration Date:</label>
-				<input type="text" id="expiration-date" name="expiration-date" placeholder="MM / YY" required>
-			</div>
-      <div class="form-group">
-				<label for="expiration-date">Price Per Ticket: $10.99</label>
-			</div>
-			<button type="submit" class="btn btn-primary">Confirm Purchase</button>
-		</form>
-	</div>
-	</br>
-	</br>
-	<script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
-    <!-- Set up a container element for the button -->
+    <div class="container">
+        <h1>LPS checkout</h1>
+        <form method="POST">
+            <div class="form-group">
+                <label for="num_tickets">Number of Tickets:</label>
+                <input type="number" id="num_tickets" name="num_tickets" min="1" max="5" value="{{ num_tickets }}" required>
+            </div>
+            <div class="form-group">
+                <label for="payment_method">Payment Method:</label>
+                <select id="payment_method" name="payment_method" required>
+                    <option value="Credit Card" {{ "selected" if payment_method == "Credit Card" }}>Credit Card</option>
+                    <option value="Debit Card" {{ "selected" if payment_method == "Debit Card" }}>Debit Card</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="card">Card Number:</label>
+                <input type="text" id="card" name="card" required>
+            </div>
+            <div class="form-group">
+                <label for="name-on-card">Name on Card:</label>
+                <input type="text" id="name-on-card" name="name-on-card" required>
+            </div>
+            <div class="form-group">
+                <label for="cvv">CVV:</label>
+                <input type="text" id="cvv" name="cvv" required>
+            </div>
+            <div class="form-group">
+                <label for="expiration-date">Expiration Date:</label>
+                <input type="text" id="expiration-date" name="expiration-date" placeholder="MM / YY" required>
+            </div>
+            <div class="form-group">
+                <label for="price">Price Per Ticket: ${{ lottery.cost }}</label>
+                <!-- Add hidden inputs for lottery details -->
+                <input type="hidden" name="lottery_id" value="{{ lottery.id }}">
+                <input type="hidden" name="price" value="{{ lottery.cost }}">
+                <input type="hidden" name="drawing_date" value="{{ lottery.drawing_date }}">
+            </div>
+            <div class="form-group">
+                <!-- Add fields for winning numbers -->
+                <label for="winning_number1">Winning Number 1:</label>
+                <input type="number" id="winning_number1" name="winning_number1" required>
+                <label for="winning_number2">Winning Number 2:</label>
+                <input type="number" id="winning_number2" name="winning_number2" required>
+                <label for="winning_number3">Winning Number 3:</label>
+                <input type="number" id="winning_number3" name="winning_number3" required>
+                <label for="winning_number4">Winning Number 4:</label>
+                <input type="number" id="winning_number4" name="winning_number4" required>
+                <label for="winning_number5">Winning Number 5:</label>
+                <input type="number" id="winning_number5" name="winning_number5" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Confirm Purchase</button>
+        </form>
+    </div>
+    <br/>
+    <br/>
+    <!-- Add the PayPal button container here -->
     <div id="paypal-button-container"></div>
+    <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
     <script>
-      paypal.Buttons({
-        // Order is created on the server and the order id is returned
-        createOrder() {
-          return fetch("/my-server/create-paypal-order", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
+        paypal.Buttons({
+            // Order is created on the server and the order id is returned
+            createOrder() {
+                // ... (your existing PayPal createOrder logic)
             },
-            // use the "body" param to optionally pass additional order information
-            // like product skus and quantities
-            body: JSON.stringify({
-              cart: [
-                {
-                  sku: "YOUR_PRODUCT_STOCK_KEEPING_UNIT",
-                  quantity: "YOUR_PRODUCT_QUANTITY",
-                },
-              ],
-            }),
-          })
-          .then((response) => response.json())
-          .then((order) => order.id);
-        },
-        // Finalize the transaction on the server after payer approval
-        onApprove(data) {
-          return fetch("/my-server/capture-paypal-order", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              orderID: data.orderID
-            })
-          })
-          .then((response) => response.json())
-          .then((orderData) => {
-            // Successful capture! For dev/demo purposes:
-            console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-            const transaction = orderData.purchase_units[0].payments.captures[0];
-            alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
-            // When ready to go live, remove the alert and show a success message within this page. For example:
-            // const element = document.getElementById('paypal-button-container');
-            // element.innerHTML = '<h3>Thank you for your payment!</h3>';
-            // Or go to another URL:  window.location.href = 'thank_you.html';
-          });
-        }
-      }).render('#paypal-button-container');
+            // Finalize the transaction on the server after payer approval
+            onApprove(data) {
+                // ... (your existing PayPal onApprove logic)
+            }
+        }).render('#paypal-button-container');
     </script>
 </body>
 </html>

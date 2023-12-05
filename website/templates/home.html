@@ -1,59 +1,45 @@
-{% extends "base.html" %} {% block title %}Home Page{% endblock %}
+{% extends "base.html" %} 
+{% block title %}Home Page{% endblock %}
 
 {% block content %}
 <link rel="stylesheet" type="text/css" href="static/style.css">
-<h1 align="left">Raider Theaters</h1>
+<h1 align="left">Lottery System</h1>
 <br/>
 
-    <div>
-     <a href="/catalog"><button class="button" style="float: right; width: 10%; text-align: right;" onclick="">Browse</button></a>
-     {% if user.email == "admin@admin.com" %} 
-     <a href="/admin"><button>Admin</button></a>
-    {% else %}
-    {% endif %}
+<div>
+  <a href="/catalog"><button class="button" style="float: right; width: 10%; text-align: right;">Browse</button></a>
+  {% if user.email == "admin@admin.com" %} 
+  <a href="/admin"><button>Admin</button></a>
+  {% else %}
+  {% endif %}
+</div>
+<br/>
+<br/>
+<br/>
+<h2>Active Lotteries</h2>
+<hr/>
+<div class="lotteries-container">
+  <section class="lottery-now">
+    <img src="https://gray-wifr-prod.cdn.arcpublishing.com/resizer/v2/5NKPCIIYS5GPRNCGQ6NTZDD6RY.jpg?auth=80d33833c63094b0fdb8d242d4e7a11b3c5842abcc41886ba913c7293c12977d&width=1600&height=900&smart=true" width="260px" height="320px" alt="Power Ball Lottery Poster">
+    <div class="lottery-info">
+      <h2>Power Ball</h2>
+      <form method="GET" action="{{ url_for('views.lottery', lottery_id=1) }}">
+        <input type="hidden" name="lottery_id" id="1" value="1">
+        <button type="submit">Details</button>
+      </form>
     </div>
-    <br/>
-    <br/>
-    <br/>
-    <h2>Now Playing</h2>
-    <hr/>
-    <div class="movies-container">
-        <div class="section-header">
-        </div>
-        <section class="movie-now">
-          <img src="https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg" width="260px" height="320px" alt="Movie Poster">
-          <div class="movie-info">
-            <h2>Inception</h2>
-            <form method="GET" action="{{ url_for('views.movie', movie_id=1) }}">
-              <input type="hidden" name="movie_id" id="1" value="1">
-              <button type="submit">Details</button>
-            </form>
-          </div>
-        </section>
-        
-        <section class="movie-now">
-          <img src="https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg" width="260px" height="320px" alt="Movie Poster">
-          <div class="movie-info">
-            <h2>Interstellar</h2>
-            <form method="GET" action="{{ url_for('views.movie', movie_id=2) }}">
-              <input type="hidden" name="movie_id" id="2" value="2">
-              <button type="submit">Details</button>
-            </form>
-          </div>
-        </section>
-        
-        <section class="movie-now">
-          <img src="https://m.media-amazon.com/images/M/MV5BMTc2MTQ3MDA1Nl5BMl5BanBnXkFtZTgwODA3OTI4NjE@._V1_.jpg" width="260px" height="320px" alt="Movie Poster">
-          <div class="movie-info">
-            <h2>The Martian</h2>
-            <form method="GET" action="{{ url_for('views.movie', movie_id=3) }}">
-              <input type="hidden" name="movie_id" id="3" value="3">
-              <button type="submit">Details</button>
-            </form>
-          </div>
-        </section>
-    </div>  
+  </section>
 
-    <br/>
-
+  <section class="lottery-now">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTc-Sqlab8GDgjaD434AOO22hSyDoilNfIFZOGY7U3djnqvROq7zDBsYS9lB9GOxXDhv_Q&usqp=CAU" width="260px" height="320px" alt="Lotto Texas Lottery Poster">
+    <div class="lottery-info">
+      <h2>Lotto Texas</h2>
+      <form method="GET" action="{{ url_for('views.lottery', lottery_id=3) }}">
+        <input type="hidden" name="lottery_id" id="3" value="3">
+        <button type="submit">Details</button>
+      </form>
+    </div>
+  </section>
+</div>
+<br/>
 {% endblock %}

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}{{ lottery.title }}{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial;
+        color: rgb(0, 0, 0);
+        position: fixed;
+        padding: 0px;
+        margin: 0px;
+    }
+
+    .split {
+        height: 100%;
+        width: 50%;
+        position: fixed;
+        z-index: -1;
+        top: 0;
+        overflow-x: hidden;
+        padding-top: 20px;
+    }
+
+    .left {
+        left: 0;
+        background-color: #343A40;
+    }
+
+    .right {
+        right: 0;
+        background-color: #ffffff;
+    }
+
+    .centered {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: left;
+    }
+
+    .centered h1 {
+        margin-bottom: 10px;
+    }
+
+    .centered img {
+        display: block;
+        margin: 0 auto;
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    .winning-amount {
+        font-size: 24px;
+        font-weight: bold;
+        color: #FFD700;
+    }
+</style>
+
+<div class="split left">
+    <div class="centered">
+        <h1>{{ lottery.title }}</h1>
+        <img src="{{ lottery.img }}" height="600" width="500" alt="{{ lottery.name }} Poster">
+    </div>
+</div>
+
+<div class="split right">
+    <div class="centered">
+        <h2 style="font-size: 40px;">How to Play</h2>
+        <p>{{ lottery.description }}</p>
+
+        <!-- Add a section for winning amount -->
+        <div class="winning-amount">
+            <p>Winning Amount: ${{ lottery.winning_amount }}</p>
+        </div>
+
+        <form action="{{ url_for('views.checkout') }}" method="GET">
+            <input type="hidden" name="lottery_id" value="{{ lottery.id }}">
+
+            <!-- Update the form to include ticket details -->
+            <div class="form-group">
+                <label for="num_tickets">Number of Tickets</label>
+                <input type="number" class="form-control" id="num_tickets" name="num_tickets" placeholder="Enter the number of tickets" required>
+            </div>
+
+            <div class="form-group">
+                <label for="payment_method">Payment Method</label>
+                <select class="form-control" id="payment_method" name="payment_method" required>
+                    <option value="credit_card">Credit Card</option>
+                    <option value="debit_card">Debit Card</option>
+                </select>
+            </div>
+
+            <button type="submit">Get Tickets</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

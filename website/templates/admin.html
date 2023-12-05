@@ -1,64 +1,117 @@
-{% extends "base.html" %} {% block title %}Admin Page{% endblock %}
+<!-- Admin Page -->
+{% extends "base.html" %}
+
+{% block title %}Admin Page{% endblock %}
 
 {% block content %}
     <h1>Admin Page</h1>
     </br>
-    <h2>Add a new movie:</h2>
+
+    <!-- Add a new lottery -->
+    <h2>Add a new lottery:</h2>
     <form method="POST" action="{{ url_for('views.admin') }}">
-      <input type="hidden" name="action" value="add">
+        <input type="hidden" name="action" value="add">
         <div>
-            <label for="title">Title:</label>
-            <input type="text" id="title" name="title" required>
+            <label for="name">Lottery Name:</label>
+            <input type="text" id="name" name="name" required>
         </div>
         <div>
-            <label for="description">Description:</label>
+            <label for="description">Description of Lottery:</label>
             <textarea id="description" name="description" required></textarea>
         </div>
         <div>
-            <label for="image_url">Image URL:</label>
+            <label for="image_url">Lottery Image URL:</label>
             <input type="text" id="image_url" name="image_url" required>
         </div>
         <div>
-            <input type="submit" value="Add Movie">
+            <label for="cost">Cost:</label>
+            <input type="text" id="cost" name="cost" required>
+        </div>
+        <div>
+            <label for="winning_number1">Winning Number 1:</label>
+            <input type="text" id="winning_number1" name="winning_number1" required>
+        </div>
+        <div>
+            <label for="winning_number2">Winning Number 2:</label>
+            <input type="text" id="winning_number2" name="winning_number2" required>
+        </div>
+        <div>
+            <label for="winning_number3">Winning Number 3:</label>
+            <input type="text" id="winning_number3" name="winning_number3" required>
+        </div>
+        <div>
+            <label for="winning_number4">Winning Number 4:</label>
+            <input type="text" id="winning_number4" name="winning_number4" required>
+        </div>
+        <div>
+            <label for="winning_number5">Winning Number 5:</label>
+            <input type="text" id="winning_number5" name="winning_number5" required>
+        </div>
+        <div>
+            <label for="winning_amount">Winning Amount:</label>
+            <input type="text" id="winning_amount" name="winning_amount" required>
+        </div>
+        <div>
+            <label for="drawing_date">Drawing Date:</label>
+            <input type="text" id="drawing_date" name="drawing_date" required>
+        </div>
+        <div>
+            <input type="submit" value="Add Lottery">
         </div>
     </form>
-  </br>
+    </br>
 
-    <h2>Edit existing movies:</h2>
+    <!-- Edit existing lotteries -->
+    <h2>Edit existing lotteries:</h2>
     <table>
-      <thead>
-        <tr>
-          <th>Actions</th>
-          <th>Title</th>
-          <th>Description</th>
-          <th>URL</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for movie in movies %}
-          <tr>
-            <form method="POST" action="{{ url_for('views.admin') }}">
-              <td>
-                <input type="submit" value="Save Changes">
-                <input type="submit" name="action" value="delete" method="POST">
-                <input type="hidden" name="id" value="{{ movie.id }}">
-              </td>
-              <input type="hidden" name="action" value="edit">
-              <input type="hidden" name="id" value="{{ movie.id }}">
-              <td><input type="text" id="title" name="title" required value="{{ movie.title }}"></td>
-              <td><textarea id="description" name="description" required>{{ movie.description }}</textarea></td>
-              <td><input type="text" id="image_url" name="image_url" required value="{{ movie.img }}"></td>
-
-            </form>
-          </tr>
-        {% endfor %}
-      </tbody>
+        <thead>
+            <tr>
+                <th>Actions</th>
+                <th>Lottery Name</th>
+                <th>Description</th>
+                <th>Image URL</th>
+                <th>Cost</th>
+                <th>Winning Number 1</th>
+                <th>Winning Number 2</th>
+                <th>Winning Number 3</th>
+                <th>Winning Number 4</th>
+                <th>Winning Number 5</th>
+                <th>Winning Amount</th>
+                <th>Drawing Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lottery in lotteries %}
+            <tr>
+                <form method="POST" action="{{ url_for('views.admin') }}">
+                    <td>
+                        <input type="submit" value="Save Changes">
+                        <input type="submit" name="action" value="delete" method="POST">
+                        <input type="hidden" name="id" value="{{ lottery.id }}">
+                    </td>
+                    <input type="hidden" name="action" value="edit">
+                    <input type="hidden" name="id" value="{{ lottery.id }}">
+                    <td><input type="text" id="name" name="name" required value="{{ lottery.name }}"></td>
+                    <td><textarea id="description" name="description" required>{{ lottery.description }}</textarea></td>
+                    <td><input type="text" id="image_url" name="image_url" required value="{{ lottery.img }}"></td>
+                    <td><input type="text" id="cost" name="cost" required value="{{ lottery.cost }}"></td>
+                    <td><input type="text" id="winning_number1" name="winning_number1" required value="{{ lottery.winning_number1 }}"></td>
+                    <td><input type="text" id="winning_number2" name="winning_number2" required value="{{ lottery.winning_number2 }}"></td>
+                    <td><input type="text" id="winning_number3" name="winning_number3" required value="{{ lottery.winning_number3 }}"></td>
+                    <td><input type="text" id="winning_number4" name="winning_number4" required value="{{ lottery.winning_number4 }}"></td>
+                    <td><input type="text" id="winning_number5" name="winning_number5" required value="{{ lottery.winning_number5 }}"></td>
+                    <td><input type="text" id="winning_amount" name="winning_amount" required value="{{ lottery.winning_amount }}"></td>
+                    <td><input type="text" id="drawing_date" name="drawing_date" required value="{{ lottery.drawing_date }}"></td>
+                </form>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
     <form method="GET">
-    </br>
-      <h1>Status Report</h1>
-      <h2>Total Tickets Sold: {{ total_tickets }} </h2>
+        </br>
+        <h1>Status Report</h1>
+        <h2>Total Tickets Sold: {{ total_tickets }} </h2>
     </form>
-  </div>
-
+</div>
 {% endblock %}
+

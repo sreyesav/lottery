@@ -1,99 +1,35 @@
-{% extends "base.html" %} {% block title %}Home Page{% endblock %}
+{% extends "base.html" %}
+
+{% block title %}Lottery Tickets{% endblock %}
 
 {% block content %}
 <link rel="stylesheet" type="text/css" href="static/style.css">
-<h1 align="left">Raider Theaters</h1>
+<h1 align="left">Lottery Ticket System</h1>
 <br/>
-  <div>
-    <h3 style="float: left; width: 50%;">CURRENTLY PLAYING</h3>
-    <div class="search-container">
-      <form method="GET" action="{{ url_for('views.movie', movie_id=1) }}">
-        <input type="text" name="title" id="{{ movie.id }}">
-        <button type="submit">Search</button>
-      </form>
+<div>
+    <h3 style="float: left; width: 50%;">CURRENT LOTTERY TICKETS</h3>
+    <!-- You might want to add a search form for lottery tickets here if needed -->
+</div>
+<br/>
+<hr/>
+<div class="lottery-tickets-container">
+    <div class="section-header">
     </div>
-  </div>
-    <br/>
-    <hr/>
-    <div class="movies-container">
-        <div class="section-header">
-        </div>
-        <section class="movie-now">
-          <img src="https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg" width="260px" height="320px" alt="Movie Poster">
-          <div class="movie-info">
-            <h2>Inception</h2>
-            <form method="GET" action="{{ url_for('views.movie', movie_id=1) }}">
-              <input type="hidden" name="movie_id" id="1" value="1">
-              <button type="submit">Details</button>
-            </form>
-          </div>
-        </section>
-        
-        <section class="movie-now">
-          <img src="https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg" width="260px" height="320px" alt="Movie Poster">
-          <div class="movie-info">
-            <h2>Interstellar</h2>
-            <form method="GET" action="{{ url_for('views.movie', movie_id=2) }}">
-              <input type="hidden" name="movie_id" id="2" value="2">
-              <button type="submit">Details</button>
-            </form>
-          </div>
-        </section>
-        
-        <section class="movie-now">
-          <img src="https://m.media-amazon.com/images/M/MV5BMTc2MTQ3MDA1Nl5BMl5BanBnXkFtZTgwODA3OTI4NjE@._V1_.jpg" width="260px" height="320px" alt="Movie Poster">
-          <div class="movie-info">
-            <h2>The Martian</h2>
-            <form method="GET" action="{{ url_for('views.movie', movie_id=3) }}">
-              <input type="hidden" name="movie_id" id="3" value="3">
-              <button type="submit">Details</button>
-            </form>
-          </div>
-        </section>
 
-    </div>
-    <div>
-      <h3 style="float: left; width: 50%;">UPCOMING</h3>
-  </div>
-  <br/>
-  <hr/>
-  <div class="movies-container">
-      <div class="section-header">
-      </div>
-
-      <section class="movie-now">
-          <img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRVexVg8LnafvaD0aU0dQCb317hzQN5XzQotu9NSURJp5Dfw5jP" width="260px" height="320px" alt="Movie Poster">
-          <div class="movie-info">
-            <h2>Limitless</h2>
-            <form method="GET" action="{{ url_for('views.movie', movie_id=4) }}">
-              <input type="hidden" name="movie_id" id="4" value="4">
-              <button type="submit">Details</button>
+    {% for lottery in lotteries %}
+    <section class="lottery-ticket">
+        <img src="{{ lottery.img }}" width="260px" height="320px" alt="{{ lottery.name }} Ticket Image">
+        <div class="ticket-info">
+            <h2>{{ lottery.name }}</h2>
+            <p>Next Draw: {{ lottery.drawing_date }}</p>
+            <form method="GET" action="{{ url_for('views.lottery', lottery_id=lottery.id) }}">
+                <input type="hidden" name="lottery_id" id="{{ lottery.id }}" value="{{ lottery.id }}">
+                <button type="submit">Details</button>
             </form>
-          </div>
-      </section>
-      
-      <section class="movie-now">
-        <img src="https://upload.wikimedia.org/wikipedia/en/1/1c/The_Dark_Knight_%282008_film%29.jpg" width="260px" height="320px" alt="Movie Poster">
-        <div class="movie-info">
-          <h2>The Dark Knight</h2>
-          <form method="GET" action="{{ url_for('views.movie', movie_id=5) }}">
-            <input type="hidden" name="movie_id" id="5" value="5">
-            <button type="submit">Details</button>
-          </form>
         </div>
-      </section>
-      
-      <section class="movie-now">
-        <img src="https://m.media-amazon.com/images/M/MV5BZTM2ZGJmNjQtN2UyOS00NjcxLWFjMDktMDE2NzMyNTZlZTBiXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_FMjpg_UX1000_.jpg" width="260px" height="320px" alt="Movie Poster">
-        <div class="movie-info">
-          <h2>American Psycho</h2>
-          <form method="GET" action="{{ url_for('views.movie', movie_id=6) }}">
-            <input type="hidden" name="movie_id" id="6" value="6">
-            <button type="submit">Details</button>
-          </form>
-        </div>
-      </section>
+    </section>
+    {% endfor %}
 
-  </div>
+</div>
 <br/>
 {% endblock %}

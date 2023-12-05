@@ -3,8 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
 
-
-
 db = SQLAlchemy()
 DB_NAME = "database.db"
 
@@ -16,19 +14,10 @@ def create_app():
 
     from .views import views
     from .auth import auth
+    from .models import User, TicketSales, LotteryTicket, Lottery, PurchaseHistory  # Add the LPS models here
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
-
-    from .models import User, TicketSales  #import the rest of the classes here
-    
-
-   # with app.app_context():
-    #    db.drop_all()
-        #db.create_all()
-        #ticket= TicketSales(total_tickets=0)
-        #db.session.add(ticket)
-       # db.session.commit()
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
@@ -36,9 +25,13 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(id):
-        return User.query.get(int(id)) #looks for primary key, checks the int version of id
+        return User.query.get(int(id))
+
+    with app.app_context():
+        db.create_all()  # Create all tables when the app starts
 
     return app
+
 
 def create_database(app):
     if not path.exists('website/' + DB_NAME):
