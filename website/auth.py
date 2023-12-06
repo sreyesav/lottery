@@ -45,7 +45,7 @@ def sign_up():
             flash('Email already exists', category='error')
         elif len(email) < 3:
             flash('Email must be greater than 2 characters', category='error')
-        elif len(name) < 2:  # Adjusted to match the new 'name' field
+        elif len(name) < 2:  
             flash('Name must be greater than 1 character', category='error')
         elif password1 != password2:
             flash('Passwords don\'t match', category='error')

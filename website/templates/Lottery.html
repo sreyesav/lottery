@@ -79,7 +79,7 @@
         <form action="{{ url_for('views.checkout') }}" method="GET">
             <input type="hidden" name="lottery_id" value="{{ lottery.id }}">
 
-            <!-- Update the form to include ticket details -->
+            <!--  include ticket details -->
             <div class="form-group">
                 <label for="num_tickets">Number of Tickets</label>
                 <input type="number" class="form-control" id="num_tickets" name="num_tickets" placeholder="Enter the number of tickets" required>
